@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["CommonConfig","DbConfig","JobDriverConfig","TaskprovConfig"],"trait":["BinaryConfig"]};

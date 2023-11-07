@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error","MetricsExporterConfiguration","MetricsExporterHandle"],"fn":["install_metrics_exporter"],"struct":["MetricsConfiguration","OtlpExporterConfiguration"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AuthenticationToken","Error","PollResult"],"fn":["default_http_client"],"struct":["Collection","CollectionJob","Collector","CollectorBuilder"]};

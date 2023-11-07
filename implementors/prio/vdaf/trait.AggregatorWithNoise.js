@@ -1,0 +1,4 @@
+(function() {var implementors = {
+"janus_core":[["impl <a class=\"trait\" href=\"prio/vdaf/trait.AggregatorWithNoise.html\" title=\"trait prio::vdaf::AggregatorWithNoise\">AggregatorWithNoise</a>&lt;16, 16, <a class=\"struct\" href=\"janus_core/dp/struct.NoDifferentialPrivacy.html\" title=\"struct janus_core::dp::NoDifferentialPrivacy\">NoDifferentialPrivacy</a>&gt; for <a class=\"struct\" href=\"prio/vdaf/poplar1/struct.Poplar1.html\" title=\"struct prio::vdaf::poplar1::Poplar1\">Poplar1</a>&lt;<a class=\"struct\" href=\"prio/vdaf/xof/struct.XofShake128.html\" title=\"struct prio::vdaf::xof::XofShake128\">XofShake128</a>, 16&gt;"]],
+"prio":[]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

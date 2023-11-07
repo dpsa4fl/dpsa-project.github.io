@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error","OpenTelemetryTraceConfiguration"],"fn":["install_trace_subscriber"],"struct":["OtlpTraceConfiguration","TokioConsoleConfiguration","TraceConfiguration","TraceGuards"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"static":["PROBLEM_JSON_MEDIA_TYPE"],"struct":["HttpApiProblem","InvalidStatusCode","StatusCode"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ClientStatePU"],"struct":["ClientState","ClientStatePermanent","ClientStateRound","CryptoConfig","RoundConfig","RoundSettings"]};

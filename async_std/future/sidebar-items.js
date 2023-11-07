@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["pending","poll_fn","ready","timeout"],"macro":["join","try_join"],"struct":["TimeoutError"],"trait":["Future"]};

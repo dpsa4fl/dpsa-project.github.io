@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["fixedpoint_l2"],"struct":["Average","Count","Histogram","Sum","SumVec"]};

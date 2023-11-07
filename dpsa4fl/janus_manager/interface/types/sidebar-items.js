@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["CreateTrainingSessionRequest","CreateTrainingSessionResponse","GetVdafParameterRequest","GetVdafParameterResponse","HpkeConfigRegistry","StartRoundRequest","StartRoundResponse","TrainingSessionId"]};

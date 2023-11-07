@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AggregatorTaskParameters","Error","QueryType"],"struct":["AggregatorTask","SerializedAggregatorTask","VerifyKey"]};

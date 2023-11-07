@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["HEADER_NAME"],"enum":["FromHeaderValueError","RetryAfter"]};

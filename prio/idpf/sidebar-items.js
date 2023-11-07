@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["IdpfError","IdpfOutputShare"],"struct":["HashMapCache","Idpf","IdpfInput","IdpfPublicShare","NoCache","RingBufferCache"],"trait":["IdpfCache","IdpfValue"]};

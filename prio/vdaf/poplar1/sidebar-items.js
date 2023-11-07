@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Poplar1FieldVec"],"struct":["Poplar1","Poplar1AggregationParam","Poplar1IdpfValue","Poplar1InputShare","Poplar1PrepareMessage","Poplar1PrepareState"],"type":["Poplar1PublicShare"]};

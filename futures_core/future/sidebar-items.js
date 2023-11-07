@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["FutureObj","LocalFutureObj"],"trait":["FusedFuture","Future","TryFuture","UnsafeFutureObj"],"type":["BoxFuture","LocalBoxFuture"]};

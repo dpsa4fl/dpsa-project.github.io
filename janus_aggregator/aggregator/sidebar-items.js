@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error"],"mod":["accumulator","aggregate_share","aggregation_job_continue","aggregation_job_creator","aggregation_job_driver","aggregation_job_writer","batch_creator","collection_job_driver","garbage_collector","http_handlers","problem_details","query_type","report_writer"],"struct":["Aggregator","Config","TaskAggregator"]};

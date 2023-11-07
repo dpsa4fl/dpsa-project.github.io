@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["ControllerStateImmut","ControllerStateMut","ControllerStatePermanent","ControllerStateRound"]};

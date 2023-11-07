@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ErrorKind","SeekFrom"],"fn":["copy","empty","repeat","sink","stderr","stdin","stdout","timeout"],"mod":["prelude"],"struct":["BufReader","BufWriter","Cursor","Empty","Error","IoSlice","IoSliceMut","Lines","Repeat","Sink","Stderr","Stdin","Stdout"],"trait":["BufRead","Read","Seek","Write"],"type":["Result"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Poll"],"struct":["Context","RawWaker","RawWakerVTable","SpawnError","Waker"],"trait":["LocalSpawn","Spawn"]};

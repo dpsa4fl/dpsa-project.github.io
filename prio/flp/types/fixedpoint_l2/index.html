@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A `Type` for summing vectors of fixed point numbers where the L2 norm of each vector is bounded by `1` and adding discrete Gaussian noise in order to achieve server differential privacy."><title>prio::flp::types::fixedpoint_l2 - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-cb6f1f67f1bcd037.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="prio" data-themes="" data-resource-suffix="" data-rustdoc-version="1.73.0 (cc66ad468 2023-10-03)" data-channel="1.73.0" data-search-js="search-6dfdfced5eff6596.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-1596385f77d47ef2.css" data-theme-dark-css="dark-0a43001d3fc2282c.css" data-theme-ayu-css="ayu-fd19013d6ce078bf.css" ><script src="../../../../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../../../../static.files/main-0795b7d26be81095.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../../static.files/light-1596385f77d47ef2.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../../static.files/dark-0a43001d3fc2282c.css"><link rel="stylesheet" href="../../../../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../../../prio/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../../../prio/index.html"><img class="rust-logo" src="../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Module fixedpoint_l2</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../../../index.html">prio</a>::<wbr><a href="../../index.html">flp</a>::<wbr><a href="../index.html">types</a>::<wbr><a class="mod" href="#">fixedpoint_l2</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../../src/prio/flp/types/fixedpoint_l2.rs.html#3-899">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A <a href="../../trait.Type.html" title="trait prio::flp::Type"><code>Type</code></a> for summing vectors of fixed point numbers where the
+<a href="https://en.wikipedia.org/wiki/Norm_(mathematics)#Euclidean_norm">L2 norm</a>
+of each vector is bounded by <code>1</code> and adding <a href="https://arxiv.org/abs/2004.00010">discrete Gaussian
+noise</a> in order to achieve server
+differential privacy.</p>
+<p>In the following a high level overview over the inner workings of this type
+is given and implementation details are discussed. It is not necessary for
+using the type, but it should be helpful when trying to understand the
+implementation.</p>
+<h4 id="overview"><a href="#overview">Overview</a></h4>
+<p>Clients submit a vector of numbers whose values semantically lie in <code>[-1,1)</code>,
+together with a norm in the range <code>[0,1)</code>. The validation circuit checks that
+the norm of the vector is equal to the submitted norm, while the encoding
+guarantees that the submitted norm lies in the correct range.</p>
+<p>The bound on the L2 norm allows calibration of discrete Gaussian noise added
+after aggregation, making the procedure differentially private.</p>
+<h4 id="submission-layout"><a href="#submission-layout">Submission layout</a></h4>
+<p>The client submissions contain a share of their vector and the norm
+they claim it has.
+The submission is a vector of field elements laid out as follows:</p>
+<div class="example-wrap"><pre class="language-text"><code>|---- bits_per_entry * entries ----|---- bits_for_norm ----|
+ ^                                  ^
+ \- the input vector entries        |
+                                    \- the encoded norm
+</code></pre></div><h4 id="different-number-encodings"><a href="#different-number-encodings">Different number encodings</a></h4>
+<p>Let <code>n</code> denote the number of bits of the chosen fixed-point type.
+Numbers occur in 5 different representations:</p>
+<ol>
+<li>Clients have a vector whose entries are fixed point numbers. Only those
+fixed point types are supported where the numbers lie in the range
+<code>[-1,1)</code>.</li>
+<li>Because norm computation happens in the validation circuit, it is done
+on entries encoded as field elements. That is, the same vector entries
+are now represented by integers in the range <code>[0,2^n)</code>, where <code>-1</code> is
+represented by <code>0</code> and <code>+1</code> by <code>2^n</code>.</li>
+<li>Because the field is not necessarily exactly of size <code>2^n</code>, but might be
+larger, it is not enough to encode a vector entry as in (2.) and submit
+it to the aggregator. Instead, in order to make sure that all submitted
+values are in the correct range, they are bit-encoded. (This is the same
+as what happens in the <a href="../struct.Sum.html" title="struct prio::flp::types::Sum"><code>Sum</code></a> type.)
+This means that instead of sending a field element in the range <code>[0,2^n)</code>,
+we send <code>n</code> field elements representing the bit encoding. The validation
+circuit can verify that all submitted “bits” are indeed either <code>0</code> or <code>1</code>.</li>
+<li>The computed and submitted norms are treated similar to the vector
+entries, but they have a different number of bits, namely <code>2n-2</code>.</li>
+<li>As the aggregation result is a pointwise sum of the client vectors,
+the numbers no longer (semantically) lie in the range <code>[-1,1)</code>, and cannot
+be represented by the same fixed point type as the input. Instead the
+decoding happens directly into a vector of floats.</li>
+</ol>
+<h4 id="fixed-point-encoding"><a href="#fixed-point-encoding">Fixed point encoding</a></h4>
+<p>Submissions consist of encoded fixed-point numbers in <code>[-1,1)</code> represented as
+field elements in <code>[0,2^n)</code>, where n is the number of bits the fixed-point
+representation has. Encoding and decoding is handled by the associated functions
+of the <a href="compatible_float/trait.CompatibleFloat.html" title="trait prio::flp::types::fixedpoint_l2::compatible_float::CompatibleFloat"><code>CompatibleFloat</code></a> trait. Semantically, the following function describes
+how a fixed-point value <code>x</code> in range <code>[-1,1)</code> is converted to a field integer:</p>
+<div class="example-wrap"><pre class="language-text"><code>enc : [-1,1) -&gt; [0,2^n)
+enc(x) = 2^(n-1) * x + 2^(n-1)
+</code></pre></div>
+<p>The inverse is:</p>
+<div class="example-wrap"><pre class="language-text"><code>dec : [0,2^n) -&gt; [-1,1)
+dec(y) = (y - 2^(n-1)) * 2^(1-n)
+</code></pre></div>
+<p>Note that these functions only make sense when interpreting all occuring
+numbers as real numbers. Since our signed fixed-point numbers are encoded as
+two’s complement integers, the computation that happens in
+<a href="compatible_float/trait.CompatibleFloat.html#tymethod.to_field_integer" title="method prio::flp::types::fixedpoint_l2::compatible_float::CompatibleFloat::to_field_integer"><code>CompatibleFloat::to_field_integer</code></a> is actually simpler.</p>
+<h4 id="value-1"><a href="#value-1">Value <code>1</code></a></h4>
+<p>We actually do not allow the submitted norm or vector entries to be
+exactly <code>1</code>, but rather require them to be strictly less. Supporting <code>1</code> would
+entail a more fiddly encoding and is not necessary for our usecase.
+The largest representable vector entry can be computed by <code>dec(2^n-1)</code>.
+For example, it is <code>0.999969482421875</code> for <code>n = 16</code>.</p>
+<h4 id="norm-computation"><a href="#norm-computation">Norm computation</a></h4>
+<p>The L2 norm of a vector xs of numbers in <code>[-1,1)</code> is given by:</p>
+<div class="example-wrap"><pre class="language-text"><code>norm(xs) = sqrt(sum_{x in xs} x^2)
+</code></pre></div>
+<p>Instead of computing the norm, we make two simplifications:</p>
+<ol>
+<li>We ignore the square root, which means that we are actually computing
+the square of the norm.</li>
+<li>We want our norm computation result to be integral and in the range <code>[0, 2^(2n-2))</code>,
+so we can represent it in our field integers. We achieve this by multiplying with <code>2^(2n-2)</code>.
+This means that what is actually computed in this type is the following:</li>
+</ol>
+<div class="example-wrap"><pre class="language-text"><code>our_norm(xs) = 2^(2n-2) * norm(xs)^2
+</code></pre></div>
+<p>Explained more visually, <code>our_norm()</code> is a composition of three functions:</p>
+<div class="example-wrap"><pre class="language-text"><code>                   map of dec()                    norm()          &quot;mult with 2^(2n-2)&quot;
+  vector of [0,2^n)    -&gt;       vector of [-1,1)    -&gt;       [0,1)         -&gt;           [0,2^(2n-2))
+                                        ^                      ^
+                                        |                      |
+                    fractions with denom of 2^(n-1)     fractions with denom of 2^(2n-2)
+</code></pre></div>
+<p>(Note that the ranges on the LHS and RHS of <code>&quot;mult with 2^(2n-2)&quot;</code> are stated
+here for vectors with a norm less than <code>1</code>.)</p>
+<p>Given a vector <code>ys</code> of numbers in the field integer encoding (in <code>[0,2^n)</code>),
+this gives the following equation:</p>
+<div class="example-wrap"><pre class="language-text"><code>our_norm_on_encoded(ys) = our_norm([dec(y) for y in ys])
+                        = 2^(2n-2) * sum_{y in ys} ((y - 2^(n-1)) * 2^(1-n))^2
+                        = 2^(2n-2)
+                          * sum_{y in ys} y^2 - 2*y*2^(n-1) + (2^(n-1))^2
+                          * 2^(1-n)^2
+                        = sum_{y in ys} y^2 - (2^n)*y + 2^(2n-2)
+</code></pre></div>
+<p>Let <code>d</code> denote the number of the vector entries. The maximal value the result
+of <code>our_norm_on_encoded()</code> can take occurs in the case where all entries are
+<code>2^n-1</code>, in which case <code>d * 2^(2n-2)</code> is an upper bound to the result. The
+finite field used for encoding must be at least as large as this.
+For validating that the norm of the submitted vector lies in the correct
+range, consider the following:</p>
+<ul>
+<li>The result of <code>norm(xs)</code> should be in <code>[0,1)</code>.</li>
+<li>Thus, the result of <code>our_norm(xs)</code> should be in <code>[0,2^(2n-2))</code>.</li>
+<li>The result of <code>our_norm_on_encoded(ys)</code> should be in <code>[0,2^(2n-2))</code>.
+This means that the valid norms are exactly those representable with <code>2n-2</code>
+bits.</li>
+</ul>
+<h4 id="noise-and-differential-privacy"><a href="#noise-and-differential-privacy">Noise and Differential Privacy</a></h4>
+<p>Bounding the submission norm bounds the impact that changing a single
+client’s submission can have on the aggregate. That is, the so-called
+L2-sensitivity of the procedure is equal to two times the norm bound, namely
+<code>2^n</code>. Therefore, adding discrete Gaussian noise with standard deviation
+<code>sigma = </code>(2^n)/epsilon<code>for some</code>epsilon<code> will make the procedure [</code>(epsilon^2)/2<code>zero-concentrated differentially private](https://arxiv.org/abs/2004.00010).</code>epsilon<code>is given as a parameter to the</code>add_noise_to_result<code>function, as part of the</code>dp_strategy<code> argument of type [</code>ZCdpDiscreteGaussian`].</p>
+<h4 id="differences-in-the-computation-because-of-distribution"><a href="#differences-in-the-computation-because-of-distribution">Differences in the computation because of distribution</a></h4>
+<p>In <code>decode_result()</code>, what is decoded are not the submitted entries of a
+single client, but the sum of the the entries of all clients. We have to
+take this into account, and cannot directly use the <code>dec()</code> function from
+above. Instead we use:</p>
+<div class="example-wrap"><pre class="language-text"><code>dec&#39;(y) = y * 2^(1-n) - c
+</code></pre></div>
+<p>Here, <code>c</code> is the number of clients.</p>
+<h4 id="naming-in-the-implementation"><a href="#naming-in-the-implementation">Naming in the implementation</a></h4>
+<p>The following names are used:</p>
+<ul>
+<li><code>self.bits_per_entry</code>           is <code>n</code></li>
+<li><code>self.entries</code>                  is <code>d</code></li>
+<li><code>self.bits_for_norm</code>            is <code>2n-2</code></li>
+</ul>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="compatible_float/index.html" title="mod prio::flp::types::fixedpoint_l2::compatible_float">compatible_float</a></div><div class="desc docblock-short">Implementations of encoding fixed point types as field elements and field elements as floats
+for the <a href="struct.FixedPointBoundedL2VecSum.html" title="struct prio::flp::types::fixedpoint_l2::FixedPointBoundedL2VecSum"><code>FixedPointBoundedL2VecSum</code></a> type.</div></li></ul><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.FixedPointBoundedL2VecSum.html" title="struct prio::flp::types::fixedpoint_l2::FixedPointBoundedL2VecSum">FixedPointBoundedL2VecSum</a></div><div class="desc docblock-short">The fixed point vector sum data type. Each measurement is a vector of fixed point numbers of
+type <code>T</code>, and the aggregate result is the float vector of the sum of the measurements.</div></li></ul></section></div></main></body></html>
